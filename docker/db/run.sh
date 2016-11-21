@@ -1,6 +1,7 @@
 #!/bin/bash
 
-mysqld&
+nohup mysqld &>/dev/null &
+
 sleep 15
 
 mysql -u root -p root < db.sql >> /var/log/mysql.log
