@@ -1,0 +1,28 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "productcatalog",
+            "image": "902954801258.dkr.ecr.us-east-1.amazonaws.com/productcatalog:$IMAGE_TAG",
+            "essential": true,
+            "memory": 256,
+            "cpu": 768,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 8080
+                }
+            ],
+            "links": [
+                "db"
+            ]
+        },
+        {
+            "name": "db",
+            "image": "902954801258.dkr.ecr.us-east-1.amazonaws.com/db:$IMAGE_TAG",
+            "essential": true,
+            "memory": 256,
+            "cpu": 128
+        }
+    ]
+}
