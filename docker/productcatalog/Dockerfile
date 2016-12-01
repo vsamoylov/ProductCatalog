@@ -1,3 +1,8 @@
 FROM tomcat:8
 
+RUN apt-get install mysql-client
 COPY *.war /usr/local/tomcat/webapps/
+ADD run.sh ./
+RUN chmod +x ./run.sh
+
+CMD [./run.sh]
