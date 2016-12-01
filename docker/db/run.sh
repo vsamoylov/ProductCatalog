@@ -1,6 +1,6 @@
 #!/bin/bash
 
-nohup mysqld &>/dev/null &
+mysqld > /dev/null 2>&1 &
 
 sleep 15
 
