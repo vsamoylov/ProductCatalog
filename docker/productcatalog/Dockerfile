@@ -7,4 +7,4 @@ ADD run.sh ./
 ADD db.sql ./
 RUN chmod +x ./run.sh
 
-CMD [./run.sh]
+CMD "./run.sh"
