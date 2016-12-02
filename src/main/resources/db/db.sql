@@ -1,7 +1,6 @@
 DROP SCHEMA IF EXISTS `ecat` ;
 CREATE SCHEMA IF NOT EXISTS `ecat` 
 
---attr type defs
 CREATE TABLE IF NOT EXISTS `ecat`.`attr_type_defs` (
   `attr_type_def_id` INT(11) NOT NULL AUTO_INCREMENT,
   `attr_type_id` INT(11) NULL DEFAULT NULL,
