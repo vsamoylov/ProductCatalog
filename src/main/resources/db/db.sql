@@ -1,6 +1,76 @@
 DROP SCHEMA IF EXISTS `ecat` ;
 CREATE SCHEMA IF NOT EXISTS `ecat` 
 
+
+CREATE TABLE IF NOT EXISTS `ecat`.`users` (
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  `email` VARCHAR(200) NULL DEFAULT NULL,
+  `address` VARCHAR(200) NULL DEFAULT NULL,
+  `password` VARCHAR(200) NULL DEFAULT NULL,
+  `confirmPassword` VARCHAR(200) NULL DEFAULT NULL,
+  `sex` VARCHAR(200) NULL DEFAULT NULL,
+  `grants` VARCHAR(200) NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8
+
+CREATE TABLE IF NOT EXISTS `ecat`.`categories` (
+  `category_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  `description` VARCHAR(2000) NULL DEFAULT NULL,
+  PRIMARY KEY (`category_id`),
+  UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+
+CREATE TABLE IF NOT EXISTS `ecat`.`attr_types` (
+  `attr_type_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  PRIMARY KEY (`attr_type_id`),
+  UNIQUE INDEX `attr_type_id_UNIQUE` (`attr_type_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+
+CREATE TABLE IF NOT EXISTS `ecat`.`pictures` (
+  `picture_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  `url` VARCHAR(1000) NULL DEFAULT NULL,
+  `width` INT(11) NULL DEFAULT NULL,
+  `height` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`picture_id`),
+  UNIQUE INDEX `picture_id_UNIQUE` (`picture_id` ASC))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+
+CREATE TABLE IF NOT EXISTS `ecat`.`object_types` (
+  `object_type_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` INT(11) NULL DEFAULT NULL,
+  `picture_id` INT(11) NULL DEFAULT NULL,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  `description` VARCHAR(1000) NULL DEFAULT NULL,
+  PRIMARY KEY (`object_type_id`),
+  UNIQUE INDEX `object_type_id_UNIQUE` (`object_type_id` ASC),
+  INDEX `parent_id_idx` (`parent_id` ASC),
+  INDEX `object_type_picture_id_idx` (`picture_id` ASC),
+  CONSTRAINT `object_type_parent_id`
+    FOREIGN KEY (`parent_id`)
+    REFERENCES `ecat`.`object_types` (`object_type_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `object_type_picture_id`
+    FOREIGN KEY (`picture_id`)
+    REFERENCES `ecat`.`pictures` (`picture_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+
 CREATE TABLE IF NOT EXISTS `ecat`.`attr_type_defs` (
   `attr_type_def_id` INT(11) NOT NULL AUTO_INCREMENT,
   `attr_type_id` INT(11) NULL DEFAULT NULL,
@@ -20,14 +90,6 @@ CREATE TABLE IF NOT EXISTS `ecat`.`attr_type_defs` (
     REFERENCES `ecat`.`object_types` (`object_type_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-
-CREATE TABLE IF NOT EXISTS `ecat`.`attr_types` (
-  `attr_type_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (`attr_type_id`),
-  UNIQUE INDEX `attr_type_id_UNIQUE` (`attr_type_id` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
@@ -58,15 +120,7 @@ CREATE TABLE IF NOT EXISTS `ecat`.`attributes` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
-CREATE TABLE IF NOT EXISTS `ecat`.`categories` (
-  `category_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(200) NULL DEFAULT NULL,
-  `description` VARCHAR(2000) NULL DEFAULT NULL,
-  PRIMARY KEY (`category_id`),
-  UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
+
 
 CREATE TABLE IF NOT EXISTS `ecat`.`list_values` (
   `list_values_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -83,29 +137,7 @@ CREATE TABLE IF NOT EXISTS `ecat`.`list_values` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
-CREATE TABLE IF NOT EXISTS `ecat`.`object_types` (
-  `object_type_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` INT(11) NULL DEFAULT NULL,
-  `picture_id` INT(11) NULL DEFAULT NULL,
-  `name` VARCHAR(200) NULL DEFAULT NULL,
-  `description` VARCHAR(1000) NULL DEFAULT NULL,
-  PRIMARY KEY (`object_type_id`),
-  UNIQUE INDEX `object_type_id_UNIQUE` (`object_type_id` ASC),
-  INDEX `parent_id_idx` (`parent_id` ASC),
-  INDEX `object_type_picture_id_idx` (`picture_id` ASC),
-  CONSTRAINT `object_type_parent_id`
-    FOREIGN KEY (`parent_id`)
-    REFERENCES `ecat`.`object_types` (`object_type_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `object_type_picture_id`
-    FOREIGN KEY (`picture_id`)
-    REFERENCES `ecat`.`pictures` (`picture_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
+
 
 CREATE TABLE IF NOT EXISTS `ecat`.`objects` (
   `object_id` INT(11) NOT NULL,
@@ -159,18 +191,6 @@ CREATE TABLE IF NOT EXISTS `ecat`.`params` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
-CREATE TABLE IF NOT EXISTS `ecat`.`pictures` (
-  `picture_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(200) NULL DEFAULT NULL,
-  `url` VARCHAR(1000) NULL DEFAULT NULL,
-  `width` INT(11) NULL DEFAULT NULL,
-  `height` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`picture_id`),
-  UNIQUE INDEX `picture_id_UNIQUE` (`picture_id` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
-
 CREATE TABLE IF NOT EXISTS `ecat`.`products` (
   `product_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(200) NULL DEFAULT NULL,
@@ -215,17 +235,3 @@ CREATE TABLE IF NOT EXISTS `ecat`.`references` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
-CREATE TABLE IF NOT EXISTS `ecat`.`users` (
-  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(200) NULL DEFAULT NULL,
-  `email` VARCHAR(200) NULL DEFAULT NULL,
-  `address` VARCHAR(200) NULL DEFAULT NULL,
-  `password` VARCHAR(200) NULL DEFAULT NULL,
-  `confirmPassword` VARCHAR(200) NULL DEFAULT NULL,
-  `sex` VARCHAR(200) NULL DEFAULT NULL,
-  `grants` VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC))
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8
